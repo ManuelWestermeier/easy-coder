@@ -72,8 +72,12 @@ export default function App() {
           </button>
         </div>
         <Editor
-          height="calc(100dvh - 30px)"
-          width="50dvw"
+          height={
+            innerHeight < innerWidth
+              ? "calc(100dvh - 30px)"
+              : "calc(50dvh - 30px)"
+          }
+          width={innerHeight < innerWidth ? "50dvw" : "100dvw"}
           theme="vs-dark"
           language={editorSelected}
           value={

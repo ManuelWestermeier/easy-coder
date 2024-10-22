@@ -48,3 +48,19 @@ button.focus {
   color: white;
   box-shadow: 0 0 -10px 100px dodgerblue;
 }
+
+@media all and (orientation:portrait) {
+  /* Style adjustments for portrait mode goes here */
+  #root {
+    flex-direction: column-reverse;
+  }
+
+  .controlls {
+    width: 100dvw;
+  }
+
+  iframe {
+    width: 100dvw;
+    height: 50dvh;
+  }
+}
