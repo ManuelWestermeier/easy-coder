@@ -10,7 +10,7 @@ export class EditorPage {
         this.onNavigate = onNavigate;
         this.project = storage.getProjectById(projectId);
         this.isDirty = false;
-        
+
         if (!this.project) {
             showNotification('Project not found', 'error');
             onNavigate('home');
@@ -21,31 +21,31 @@ export class EditorPage {
     render() {
         const app = document.getElementById('app');
         app.innerHTML = '';
-        
+
         const container = createElement('div', { class: 'container' });
-        
+
         // Navbar
         container.appendChild(this.createNavbar());
-        
+
         // Editor Layout
         const content = createElement('div', { class: 'content' });
         const layout = createElement('div', { class: 'editor-layout' });
-        
+
         // Editor Panel
         const editorPanel = createElement('div', { class: 'editor-panel' });
         editorPanel.id = 'editor-panel';
         layout.appendChild(editorPanel);
-        
+
         // Preview Panel
         const previewPanel = createElement('div', { class: 'preview-panel' });
         previewPanel.id = 'preview-panel';
         layout.appendChild(previewPanel);
-        
+
         content.appendChild(layout);
         container.appendChild(content);
-        
+
         app.appendChild(container);
-        
+
         // Initialisiere Editoren
         this.initEditors();
         this.attachEventListeners();
@@ -53,14 +53,14 @@ export class EditorPage {
 
     createNavbar() {
         const navbar = createElement('div', { class: 'navbar' });
-        
+
         const left = createElement('div', { class: 'navbar-left' });
-        
+
         const backBtn = createElement('button', {
             class: 'logo',
             type: 'button'
         }, '← Back');
-        
+
         backBtn.addEventListener('click', () => {
             if (this.isDirty) {
                 openModal(
@@ -79,9 +79,9 @@ export class EditorPage {
                 this.onNavigate('home');
             }
         });
-        
+
         left.appendChild(backBtn);
-        
+
         const projectName = createElement('div', {
             style: {
                 fontSize: '1.1rem',
@@ -89,38 +89,38 @@ export class EditorPage {
                 color: 'var(--light)'
             }
         }, this.project.name);
-        
+
         left.appendChild(projectName);
-        
+
         navbar.appendChild(left);
-        
+
         // Actions
         const actions = createElement('div', { class: 'footer-actions' });
-        
+
         const saveBtn = createElement('button', {
             class: 'btn btn-success btn-small',
             type: 'button',
             'data-action': 'save'
         }, '💾 Save');
-        
+
         const editNameBtn = createElement('button', {
             class: 'btn btn-secondary btn-small',
             type: 'button',
             'data-action': 'rename'
         }, '✎ Rename');
-        
+
         const moreBtn = createElement('button', {
             class: 'btn btn-secondary btn-small',
             type: 'button',
             'data-action': 'more'
         }, '⋮ More');
-        
+
         actions.appendChild(saveBtn);
         actions.appendChild(editNameBtn);
         actions.appendChild(moreBtn);
-        
+
         navbar.appendChild(actions);
-        
+
         return navbar;
     }
 
@@ -130,7 +130,7 @@ export class EditorPage {
             onChange: (lang, value) => {
                 this.project[lang === 'javascript' ? 'js' : lang] = value;
                 this.isDirty = true;
-                
+
                 // Update Preview
                 if (this.preview) {
                     this.preview.update(
@@ -144,12 +144,12 @@ export class EditorPage {
                 // Optional: Language-spezifische Aktionen
             }
         });
-        
+
         // Set initial values
         this.codeEditor.setValue('html', this.project.html);
         this.codeEditor.setValue('css', this.project.css);
         this.codeEditor.setValue('javascript', this.project.js);
-        
+
         // Preview
         this.preview = new Preview('preview-panel');
         this.preview.update(
@@ -165,26 +165,26 @@ export class EditorPage {
         if (saveBtn) {
             saveBtn.addEventListener('click', () => this.saveProject());
         }
-        
+
         // Rename
         const renameBtn = document.querySelector('[data-action="rename"]');
         if (renameBtn) {
             renameBtn.addEventListener('click', () => this.showRenameModal());
         }
-        
+
         // More Options
         const moreBtn = document.querySelector('[data-action="more"]');
         if (moreBtn) {
             moreBtn.addEventListener('click', () => this.showMoreOptions());
         }
-        
-        // Auto-save every 10 seconds if dirty
+
+        // Auto-save every 1 seconds if dirty
         setInterval(() => {
             if (this.isDirty) {
                 this.autoSave();
             }
-        }, 10000);
-        
+        }, 1000);
+
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && e.key === 's') {
@@ -196,15 +196,15 @@ export class EditorPage {
 
     saveProject() {
         const values = this.codeEditor.getAllValues();
-        
+
         this.project.html = values.html;
         this.project.css = values.css;
         this.project.js = values.javascript;
-        
+
         if (storage.saveProject(this.project)) {
             this.isDirty = false;
             showNotification('Project saved!', 'success');
-            
+
             // Update preview
             this.preview.update(
                 this.project.html,
@@ -218,11 +218,11 @@ export class EditorPage {
 
     autoSave() {
         const values = this.codeEditor.getAllValues();
-        
+
         this.project.html = values.html;
         this.project.css = values.css;
         this.project.js = values.javascript;
-        
+
         storage.saveProject(this.project);
         console.log('Auto-saved at', new Date().toLocaleTimeString());
     }
@@ -234,12 +234,12 @@ export class EditorPage {
             value: this.project.name,
             maxlength: '100'
         });
-        
+
         setTimeout(() => {
             input.focus();
             input.select();
         }, 0);
-        
+
         openModal(
             'Rename Project',
             input,
@@ -254,7 +254,7 @@ export class EditorPage {
                             showNotification('Project name cannot be empty', 'error');
                             return;
                         }
-                        
+
                         this.project.name = newName;
                         if (storage.saveProject(this.project)) {
                             showNotification('Project renamed!', 'success');
@@ -269,15 +269,15 @@ export class EditorPage {
     showMoreOptions() {
         const modal = document.createElement('div');
         modal.className = 'modal-overlay';
-        
+
         const menu = document.createElement('div');
         menu.className = 'modal';
         menu.style.maxWidth = '300px';
-        
+
         const title = document.createElement('h2');
         title.textContent = 'More Options';
         menu.appendChild(title);
-        
+
         const options = [
             {
                 label: '📥 Import Project',
@@ -296,28 +296,28 @@ export class EditorPage {
                 action: () => this.deleteProject()
             }
         ];
-        
+
         options.forEach(opt => {
             const btn = document.createElement('button');
             btn.className = 'btn btn-secondary';
             btn.style.width = '100%';
             btn.style.marginBottom = '0.5rem';
             btn.textContent = opt.label;
-            
+
             btn.addEventListener('click', () => {
                 modal.remove();
                 opt.action();
             });
-            
+
             menu.appendChild(btn);
         });
-        
+
         modal.appendChild(menu);
-        
+
         modal.addEventListener('click', (e) => {
             if (e.target === modal) modal.remove();
         });
-        
+
         document.body.appendChild(modal);
     }
 
@@ -328,20 +328,20 @@ export class EditorPage {
             css: this.codeEditor.getValue('css'),
             js: this.codeEditor.getValue('javascript')
         }, null, 2);
-        
+
         const blob = new Blob([data], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
-        
+
         const a = document.createElement('a');
         a.href = url;
         a.download = `${this.project.name.replace(/\s+/g, '-').toLowerCase()}.json`;
-        
+
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-        
+
         URL.revokeObjectURL(url);
-        
+
         showNotification('Project exported!', 'success');
     }
 
@@ -349,21 +349,21 @@ export class EditorPage {
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = '.json';
-        
+
         input.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
-            
+
             const reader = new FileReader();
             reader.onload = (event) => {
                 try {
                     const imported = JSON.parse(event.target.result);
-                    
+
                     if (!imported.html || !imported.css || !imported.js) {
                         showNotification('Invalid project format', 'error');
                         return;
                     }
-                    
+
                     const newProject = {
                         id: Date.now(),
                         name: imported.name || 'Imported Project',
@@ -373,7 +373,7 @@ export class EditorPage {
                         createdAt: new Date().toISOString(),
                         updatedAt: new Date().toISOString()
                     };
-                    
+
                     storage.saveProject(newProject);
                     showNotification('Project imported!', 'success');
                     this.onNavigate('editor', newProject.id);
@@ -381,10 +381,10 @@ export class EditorPage {
                     showNotification('Error importing project', 'error');
                 }
             };
-            
+
             reader.readAsText(file);
         });
-        
+
         input.click();
     }
 
