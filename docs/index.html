@@ -1,55 +1,35 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="easy-coder: A lightweight web editor for HTML, CSS, and JavaScript. Create, manage, and run web projects instantly. All projects saved locally.">
+    <meta name="keywords" content="code editor, HTML, CSS, JavaScript, web development, online IDE">
+    <meta name="author" content="easy-coder">
+    <meta name="theme-color" content="#1e1e1e">
 
-  <!-- Mobile Optimization -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Open Graph -->
+    <meta property="og:title" content="easy-coder - Web Code Editor">
+    <meta property="og:description"
+        content="Create and manage web projects with our lightweight HTML, CSS, and JavaScript editor. All data stored locally.">
+    <meta property="og:type" content="website">
 
-  <!-- Title (VERY IMPORTANT for SEO) -->
-  <title>EASY CODER – Online HTML File Viewer & Code Tools</title>
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="easy-coder">
+    <meta name="twitter:description" content="Fast and simple web code editor">
 
-  <!-- Meta Description -->
-  <meta name="description" content="EASY CODER is a fast and free online HTML file viewer. Preview, inspect and test HTML code instantly in your browser." />
-
-  <!-- Keywords -->
-  <meta name="keywords" content="HTML viewer, online HTML editor, code preview, HTML tester, web development tools, EASY CODER" />
-
-  <!-- Author -->
-  <meta name="author" content="EASY CODER" />
-
-  <!-- Robots -->
-  <meta name="robots" content="index, follow" />
-
-  <!-- Favicon -->
-  <link rel="icon" href="./icon_low.jpg" />
-
-  <!-- Open Graph (for Facebook, Discord, etc.) -->
-  <meta property="og:title" content="EASY CODER – Online HTML File Viewer" />
-  <meta property="og:description" content="Preview and test HTML files instantly with EASY CODER." />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="./icon_low.jpg" />
-  <meta property="og:url" content="https://easy-coder.manuel-westermeier.de" />
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="EASY CODER – HTML Viewer" />
-  <meta name="twitter:description" content="Fast online HTML viewer and preview tool." />
-  <meta name="twitter:image" content="./icon_low.jpg" />
-
-  <!-- CSS -->
-  <link rel="stylesheet" crossorigin href="/assets/index-BCNswsNQ.css">
-
-  <!-- JS -->
-  <script type="module" crossorigin src="/assets/index-FIMEa2Dc.js"></script>
+    <title>easy-coder - Web Code Editor</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%23FF6B6B'>&lt;/&gt;</text></svg>">
 </head>
-<body>
-  <!-- Main Content Container -->
-  <div id="root"></div>
 
-  <!-- Fallback Content for SEO -->
-  <noscript>
-    EASY CODER is an online HTML file viewer that allows you to preview and test HTML code directly in your browser.
-  </noscript>
+<body>
+    <div id="app"></div>
+    <script type="module" src="app.js"></script>
 </body>
+
 </html>
