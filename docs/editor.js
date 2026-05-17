@@ -6,46 +6,46 @@ export class CodeEditor {
     constructor(containerId, options = {}) {
         this.container = document.getElementById(containerId);
         this.activeLanguage = options.defaultLanguage || 'html';
-        this.onChange = options.onChange || (() => {});
-        this.onLanguageChange = options.onLanguageChange || (() => {});
-        
+        this.onChange = options.onChange || (() => { });
+        this.onLanguageChange = options.onLanguageChange || (() => { });
+
         this.editors = {
             html: '',
             css: '',
             javascript: ''
         };
-        
+
         this.init();
     }
 
     init() {
         this.container.innerHTML = '';
-        
+
         // Header mit Tabs
         const header = createElement('div', { class: 'editor-header' });
-        
+
         const tabs = createElement('div', { class: 'editor-tabs' });
-        
+
         const languages = [
             { id: 'html', label: 'HTML', icon: '⟨⟩' },
             { id: 'css', label: 'CSS', icon: '🎨' },
             { id: 'javascript', label: 'JavaScript', icon: '⚙' }
         ];
-        
+
         languages.forEach(lang => {
             const btn = createElement('button', {
                 class: `tab-btn ${lang.id === this.activeLanguage ? 'active' : ''}`,
                 'data-language': lang.id,
                 type: 'button'
             }, `${lang.icon} ${lang.label}`);
-            
+
             btn.addEventListener('click', () => this.switchLanguage(lang.id));
             tabs.appendChild(btn);
         });
-        
+
         header.appendChild(tabs);
         this.container.appendChild(header);
-        
+
         // Editor-Bereich
         const editorContent = createElement('div', {
             style: {
@@ -54,7 +54,7 @@ export class CodeEditor {
                 overflow: 'hidden'
             }
         });
-        
+
         // Textarea für Code
         this.textarea = createElement('textarea', {
             class: 'code-textarea',
@@ -73,7 +73,7 @@ export class CodeEditor {
                 tab: '4'
             }
         }, '');
-        
+
         // Zeilennummern
         const lineNumbers = createElement('div', {
             class: 'line-numbers',
@@ -91,18 +91,18 @@ export class CodeEditor {
                 overflowY: 'hidden'
             }
         });
-        
+
         this.lineNumbers = lineNumbers;
-        
+
         editorContent.appendChild(lineNumbers);
         editorContent.appendChild(this.textarea);
-        
+
         this.container.appendChild(editorContent);
-        
+
         // Event Listener
         this.textarea.addEventListener('input', () => this.handleInput());
         this.textarea.addEventListener('scroll', () => this.syncScroll());
-        
+
         // Tab-Support
         this.textarea.addEventListener('keydown', (e) => {
             if (e.key === 'Tab') {
@@ -114,7 +114,7 @@ export class CodeEditor {
                 this.handleInput();
             }
         });
-        
+
         // Tastenkombinationen
         this.textarea.addEventListener('keydown', (e) => {
             if (e.ctrlKey || e.metaKey) {
@@ -130,7 +130,7 @@ export class CodeEditor {
                 }
             }
         });
-        
+
         this.updateLineNumbers();
     }
 
@@ -161,17 +161,17 @@ export class CodeEditor {
     switchLanguage(language) {
         // Speichere aktuellen Wert
         this.editors[this.activeLanguage] = this.textarea.value;
-        
+
         // Wechsle Sprache
         this.activeLanguage = language;
         this.textarea.setAttribute('data-language', language);
         this.textarea.value = this.editors[language] || '';
-        
+
         // Update Tabs
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.classList.toggle('active', btn.getAttribute('data-language') === language);
         });
-        
+
         this.updateLineNumbers();
         this.syncScroll();
         this.onLanguageChange(language);
@@ -180,7 +180,7 @@ export class CodeEditor {
     handleInput() {
         this.editors[this.activeLanguage] = this.textarea.value;
         this.updateLineNumbers();
-        
+
         // Debounce onChange
         debounce(() => {
             this.onChange(this.activeLanguage, this.textarea.value);
@@ -188,12 +188,11 @@ export class CodeEditor {
     }
 
     updateLineNumbers() {
+        this.lineNumbers.innerHTML = "";
         const lines = this.textarea.value.split('\n').length;
-        let lineNumbers = '';
         for (let i = 1; i <= lines; i++) {
-            lineNumbers += i + '\n';
+            this.lineNumbers.innerHTML += '<span>' + i + '</span>\n';
         }
-        this.lineNumbers.textContent = lineNumbers;
     }
 
     syncScroll() {
@@ -220,19 +219,19 @@ export class Preview {
         this.html = '';
         this.css = '';
         this.js = '';
-        
+
         this.init();
     }
 
     init() {
         this.container.innerHTML = '';
-        
+
         const header = createElement('div', { class: 'editor-header' });
         const title = createElement('div', {}, 'Preview');
         header.appendChild(title);
-        
+
         this.container.appendChild(header);
-        
+
         this.iframeContainer = createElement('div', {
             style: {
                 flex: '1',
@@ -240,7 +239,7 @@ export class Preview {
                 background: 'white'
             }
         });
-        
+
         this.iframe = createElement('iframe', {
             style: {
                 width: '100%',
@@ -248,7 +247,7 @@ export class Preview {
                 border: 'none'
             }
         });
-        
+
         this.iframeContainer.appendChild(this.iframe);
         this.container.appendChild(this.iframeContainer);
     }
@@ -257,7 +256,7 @@ export class Preview {
         this.html = html;
         this.css = css;
         this.js = js;
-        
+
         try {
             const iframeUrl = createPreviewUrl(html, css, js);
             this.iframe.src = iframeUrl;

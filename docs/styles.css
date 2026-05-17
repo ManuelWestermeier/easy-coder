@@ -674,6 +674,7 @@ body {
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
+    max-width: 30px;
 }
 
 .notification {
